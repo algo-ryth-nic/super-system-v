@@ -1,0 +1,7 @@
+## Backend Node Server
+
+### What it does
+1) Serves static files
+2) Handel csv file uploads
+3) Run py code
+4) Handel get request for private urls
