@@ -31,6 +31,8 @@ def apply_apriori(data: pd.DataFrame, min_sup: float) -> pd.DataFrame:
 # flask setup
 app = Flask(__name__)
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+if not os.path.exists(UPLOAD_FOLDER): os.mkdir(UPLOAD_FOLDER)
+
 ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls', 'txt'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
