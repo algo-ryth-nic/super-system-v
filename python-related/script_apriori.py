@@ -18,7 +18,7 @@ def prepareData(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(te_ary, columns=te.columns_)
 
 
-def run_apriori(id, filepath) -> pd.DataFrame:
+def run_apriori(id, filepath, support) -> pd.DataFrame:
     file_extension = os.path.splitext(filepath)[1][1:]
     # print(file_extension)
 
@@ -29,11 +29,11 @@ def run_apriori(id, filepath) -> pd.DataFrame:
     else:
         return None
 
-    MIN_SUP_DEFAULT = 0.1
+    # MIN_SUP_DEFAULT = 0.1
 
     freq_itemsets = apriori(
             prepareData(df), 
-            min_support=MIN_SUP_DEFAULT, 
+            min_support=support, 
             use_colnames=True
         ).sort_values(by='support', ascending=False)
 
@@ -60,11 +60,12 @@ def run_apriori(id, filepath) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Usage: python3 apriori-script.py <path-to-dataset> <uuid>")
+    if len(sys.argv) < 4:
+        print("Usage: python3 apriori-script.py <path-to-dataset> <uuid> <min-support>")
         exit(1)
 
     FILEPATH = sys.argv[1]
     ID = sys.argv[2]
-
-    run_apriori(id, FILEPATH)
+    sup = float(sys.argv[3])
+    
+    run_apriori(id, FILEPATH, sup)
