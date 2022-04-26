@@ -9,12 +9,14 @@ if len(sys.argv) < 2:
     exit(1)
 
 path = sys.argv[1]
-df = pd.read_csv(path)
-data = df.to_json(orient='records')
 
-headers = {'Content-type': 'application/json'}
+files = {
+  "file": open(path, "rb")
+  }
+
+session = requests.Session()
 start = timeit.default_timer()
-res = requests.post('http://localhost:5000/aprori', data=data, headers=headers)
+res = session.post('http://localhost:5000/upload', files=files)
 end = timeit.default_timer()
 
 if res.ok:

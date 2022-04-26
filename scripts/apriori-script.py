@@ -1,8 +1,9 @@
 import pandas as pd
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
-import json
 from flask import Flask, request, jsonify
+from werkzeug.utils import secure_filename
+import os
 
 def prepareData(df: pd.DataFrame) -> pd.DataFrame:
     # converts the dataframe to a list of lists
@@ -29,16 +30,48 @@ def apply_apriori(data: pd.DataFrame, min_sup: float) -> pd.DataFrame:
 
 # flask setup
 app = Flask(__name__)
+UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
+ALLOWED_EXTENSIONS = {'csv', 'xlsx', 'xls', 'txt'}
 
-@app.post('/aprori')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.post('/upload')
 def upload_data():
-    data = request.get_json(force=True)
+    # check if the post request has the file part
+    if 'file' not in request.files:
+        return jsonify({"message": "Request has no file part"}), 400
+   
 
-    df = pd.read_json(json.dumps(data), orient='records')
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        # to prevent modification of server's filesystem
+        filename = secure_filename(file.filename)
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # saves the file 
+        file.save(file_path)
+        if os.path.exists(file_path):
+            return jsonify({"message" : "upload succesful!"}), 201
+        else:
+            return jsonify({"message": "something went wrong, couldn't save the file!"}), 500
+    else:
+        return jsonify({"message" : "File extension not valid, accepted file extensions are " \
+            + str(ALLOWED_EXTENSIONS)}), 400
+
+
+    # data = request.get_json(force=True)
+
+    # df = pd.read_json(json.dumps(data), orient='records')
     # make async call to apriori
-    freq, rules = apply_apriori(df, 0.02)
-    data = {'frequent-itemsets': freq, 'association-rules': rules}
-    return jsonify(data)
+    # freq, rules = apply_apriori(df, 0.02)
+    # data = {'frequent-itemsets': freq, 'association-rules': rules}
+    # return jsonify(data)
 
 
 if __name__ == "__main__":
@@ -46,11 +79,5 @@ if __name__ == "__main__":
 
 
 """
-- Instead of taking json as input, take a csv file using post
-- on successful upload, return a private url endpoint using UUID
-- on calling that endpoint, return an html
-- make endpoint for get request for getting freq & rules
-- integrate mongodb to the script
-- make call to aprori async, on completion store that in a document with UUID as an id
-- change the input form of table, extra processing
+- Add a file size limit
 """
