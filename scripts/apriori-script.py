@@ -4,6 +4,7 @@ from mlxtend.frequent_patterns import apriori, association_rules
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import os
+import pymongo
 
 def prepareData(df: pd.DataFrame) -> pd.DataFrame:
     # converts the dataframe to a list of lists
@@ -25,6 +26,12 @@ def apply_apriori(data: pd.DataFrame, min_sup: float) -> pd.DataFrame:
     json_freq_items, json_rules = freq_itemsets.to_json(orient='records'), \
         rules.to_json(orient='records')
     return json_freq_items, json_rules
+
+
+def connect_to_mongo():
+    client = pymongo.MongoClient('localhost', 27017)
+    db = client.aprioriPlatform
+    return db
 
 
 
@@ -77,7 +84,8 @@ def upload_data():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    connect_to_mongo()
 
 
 """
