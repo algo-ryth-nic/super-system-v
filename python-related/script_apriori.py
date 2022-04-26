@@ -64,8 +64,8 @@ if __name__ == '__main__':
         print("Usage: python3 apriori-script.py <path-to-dataset> <uuid> <min-support>")
         exit(1)
 
-    FILEPATH = sys.argv[1]
-    ID = sys.argv[2]
+    FILEPATH = str(sys.argv[1])
+    ID = str(sys.argv[2])
     sup = float(sys.argv[3])
     
-    run_apriori(id, FILEPATH, sup)
+    run_apriori(ID, FILEPATH, sup)

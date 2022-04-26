@@ -1,5 +1,6 @@
 import pymongo
 from datetime import datetime
+import json
 
 # Mongodb related functions
 def connect_to_mongo():
@@ -9,7 +10,7 @@ def connect_to_mongo():
 
 
 def store_results(id: str, data: dict):
-    # print(data.keys())
+    # print(type(id))
     db = connect_to_mongo()
     results = db.apriori_results
     results.insert_one({
@@ -24,6 +25,11 @@ def get_results(id: str):
     db = connect_to_mongo()
     results = db.apriori_results
     data = results.find_one({'_id': id})
-    print(data)
+    # print(data)
     return data
 
+
+if __name__ == "__main__":
+    # store_results('2', {'freq_items': [], 'rules': []})
+    # print(get_results('2'))
+    pass
