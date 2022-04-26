@@ -3,7 +3,8 @@ from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
 import os
 from handler_db import store_results, get_results
-from server import UPLOAD_FOLDER
+import sys
+
 
 def prepareData(df: pd.DataFrame) -> pd.DataFrame:
     # converts the dataframe to a list of lists
@@ -17,12 +18,10 @@ def prepareData(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(te_ary, columns=te.columns_)
 
 
-def run_apriori(id, filename) -> pd.DataFrame:
-    file_extension = os.path.splitext(filename)[1][1:]
-    # print(os.path.splitext(filename))
+def run_apriori(id, filepath) -> pd.DataFrame:
+    file_extension = os.path.splitext(filepath)[1][1:]
     # print(file_extension)
 
-    filepath = os.path.join(UPLOAD_FOLDER, filename)
     if file_extension == 'csv':
         df = pd.read_csv(filepath)
     elif file_extension == 'xlsx' or file_extension == 'xls':
@@ -60,7 +59,12 @@ def run_apriori(id, filename) -> pd.DataFrame:
     return json_freq_items, json_rules
 
 
-if __name__ == "__main__":
-    # run_apriori('5c6b8d6b9f8c8a1d8e6d9f2f', 'test.csv')
-    print(get_results('787f97e9-c19a-40c7-8853-6fd56bcb475a'))
-    pass
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        print("Usage: python3 apriori-script.py <path-to-dataset> <uuid>")
+        exit(1)
+
+    FILEPATH = sys.argv[1]
+    ID = sys.argv[2]
+
+    run_apriori(id, FILEPATH)
