@@ -5,7 +5,7 @@ import json
 # Mongodb related functions
 def connect_to_mongo():
     client = pymongo.MongoClient('localhost', 27017)
-    db = client.aprioriPlatform
+    db = client.userdatassv
     return db
 
 

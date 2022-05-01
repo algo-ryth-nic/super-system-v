@@ -2,9 +2,25 @@ const express = require('express')
 const multer = require('multer')
 const path = require('path')
 
+//DB-CONNECTION
+const { MongoClient } = require("mongodb");
+const uri = "mongodb://127.0.0.1:27017/";
+const client = new MongoClient(uri);
+
+async function connectToDb() {
+  try {
+    await client.connect();
+    console.log("Connected successfully to DataBase");
+  } catch (e) {
+    console.log("Error");
+    console.log(e);
+  }
+}
+connectToDb();
+//DB-CONNECTION
 
 const app = express()
-const port = 3000
+const port = 3001
 
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath))
@@ -35,7 +51,16 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
   }
 })
 
+app.get('/result/:rid', (req, res) => {
+  client.db("userdatassv").collection("apriori_results").find({ "_id": req.params.rid.toString() }).toArray((error, result) => {
+    if (error) {
+      return res.status(500).send(error);
+    }
+    res.send(result);
+  })
+
+})
 
 app.listen(port, () => {
   console.log(`Running on Port ${port}`)
-})
+});
