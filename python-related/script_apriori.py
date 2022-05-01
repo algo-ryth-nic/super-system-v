@@ -22,12 +22,13 @@ def run_apriori(id, filepath, support) -> pd.DataFrame:
     file_extension = os.path.splitext(filepath)[1][1:]
     # print(file_extension)
 
-    if file_extension == 'csv':
-        df = pd.read_csv(filepath)
-    elif file_extension == 'xlsx' or file_extension == 'xls':
-        df = pd.read_excel(filepath)
-    else:
-        return None
+    df = pd.read_csv(filepath)
+    #if file_extension == 'csv':
+    #    df = pd.read_csv(filepath)
+    #elif file_extension == 'xlsx' or file_extension == 'xls':
+    #    df = pd.read_excel(filepath)
+    #else:
+    #    return None
 
     # MIN_SUP_DEFAULT = 0.1
 
