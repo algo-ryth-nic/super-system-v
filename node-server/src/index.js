@@ -37,5 +37,5 @@ app.post('/upload', upload.single('csvdata'), function (req, res, next) {
 
 
 app.listen(port, () => {
-  console.log(`Running on Port ${port}\nServing from ${publicPath}`)
+  console.log(`Running on Port ${port}`)
 })

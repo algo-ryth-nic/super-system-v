@@ -1,4 +1,5 @@
 */node_modules
 */dist
+*/public/*
 */__pycache__
 node-server/uploads/*

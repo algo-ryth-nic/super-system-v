@@ -13,19 +13,11 @@ RUN mkdir -p /home/app
 WORKDIR /home/app
 COPY ./node-server ./node-server
 COPY ./python-related ./python-related
-COPY ./react-client ./react-client
+COPY ./html-client ./node-server/public
 COPY ./requirements.txt ./requirements.txt
 
 # Install Python requirments
 RUN pip install -r requirements.txt
-
-# build react app
-WORKDIR /home/app/react-client
-RUN npm install
-RUN npm run build
-
-# copy the builds to node server public dir
-RUN cp -r /home/app/react-client/dist/* /home/app/node-server/public/
 
 # Install modules for node server
 WORKDIR /home/app/node-server
