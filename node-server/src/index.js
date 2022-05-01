@@ -27,11 +27,11 @@ const upload = multer({
 
 
 app.post('/upload', upload.single('csvdata'), function (req, res, next) {
-  if(req.file){
-    res.status(204).end();
+  if (req.file) {
+    res.redirect(`http://${req.get('host')}/?msg=upload sucess&id=${req.file.filename}`);
   }
-  else{
-    res.status(500).end();
+  else {
+    res.redirect(`http://${req.get('host')}/?msg=wrong format`);
   }
 })
 
