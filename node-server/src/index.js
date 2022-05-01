@@ -4,8 +4,9 @@ const path = require('path')
 
 //DB-CONNECTION
 const { MongoClient } = require("mongodb");
-const uri = "mongodb://127.0.0.1:27017/";
+const uri = "mongodb://mongodb:27017/";
 const client = new MongoClient(uri);
+const { exec } = require('child_process');
 
 async function connectToDb() {
   try {
@@ -20,7 +21,7 @@ connectToDb();
 //DB-CONNECTION
 
 const app = express()
-const port = 3001
+const port = 3000
 
 const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath))
@@ -41,9 +42,16 @@ const upload = multer({
   }
 })
 
+const pythonCodeDir = "/home/psaini/wsf/github/super-system-v/python-related/";
+const pythonScript = "script_apriori.py";
+const pathToDataset = "/home/psaini/wsf/github/super-system-v/node-server/uploads/"
+const uuid = "123";
+const minSupport = "0.05";
+
 
 app.post('/upload', upload.single('csvdata'), function (req, res, next) {
   if (req.file) {
+    exec(`python ${pythonCodeDir}${pythonScript} ${pathToDataset}${req.file.filename} ${uuid} ${minSupport}`);
     res.redirect(`http://${req.get('host')}/?msg=upload sucess&id=${req.file.filename}`);
   }
   else {

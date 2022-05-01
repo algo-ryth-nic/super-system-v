@@ -6,9 +6,13 @@ services:
     hostname: localhost
     ports:
         - "3000:3000"
+    links:
+      - mongodb
   mongodb:
     image: mongo:4.4.6
     # only for testing we expose this port
     # will remore this later
+    expose:
+     - 27017
     ports:
       - 27017:27017
