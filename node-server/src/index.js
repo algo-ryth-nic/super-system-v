@@ -45,13 +45,12 @@ const upload = multer({
 const pythonCodeDir = "/home/app/python-related/";
 const pythonScript = "script_apriori.py";
 const pathToDataset = "/home/app/node-server/uploads/";
-const uuid = "123";
 const minSupport = "0.05";
 
 
 app.post('/upload', upload.single('csvdata'), function (req, res, next) {
   if (req.file) {
-    exec(`python3 ${pythonCodeDir}${pythonScript} ${pathToDataset}${req.file.filename} ${uuid} ${minSupport}`);
+    exec(`python3 ${pythonCodeDir}${pythonScript} ${pathToDataset}${req.file.filename} ${req.file.filename} ${minSupport}`);
     res.redirect(`http://${req.get('host')}/?msg=upload sucess&id=${req.file.filename}`);
   }
   else {
