@@ -1,4 +1,4 @@
-version: "1.0"
+version: "3.7"
 
 services:
   nodeserver:
@@ -6,3 +6,9 @@ services:
     hostname: localhost
     ports:
         - "3000:3000"
+  mongodb:
+    image: mongo:4.4.6
+    # only for testing we expose this port
+    # will remore this later
+    ports:
+      - 27017:27017
