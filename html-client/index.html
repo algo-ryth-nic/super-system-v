@@ -68,10 +68,33 @@
             </div>
         </div>
         <div class="container justify-content-center">
-            <div id="msg-box">
-                
-            </div>
-            
+            <div id="msg-box"></div>
+        </div>
+        <div class="container">
+            <br />
+            <h3>Generated Rules</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">lift</th>
+                        <th scope="col">antecedent support</th>
+                        <th scope="col">consequent support</th>
+                        <th scope="col">antecedents</th>
+                        <th scope="col">consequents</th>
+                        <th scope="col">confidence</th>
+                    </tr>
+                </thead>
+                <tbody id="tabledata">
+                    <tr>
+                        <th scope="row">${lift}</th>
+                        <td>${antecedent support}</td>
+                        <td>${consequent support}</td>
+                        <td>${antecedents}</td>
+                        <td>${consequents}</td>
+                        <td>${confidence}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </body>
 </html>

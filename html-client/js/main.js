@@ -20,13 +20,31 @@ Please wait while the data is being processed, You can save the Url to view the 
 const getResult = async (id) => {    
     const result = await fetch(`http://${url.host}/result/${id}`);
     const resultObj = await result.json();
-    return resultObj[0];
+    return resultObj;
     
 }
 
 const plotData = (obj) => {
-    console.log(JSON.parse(obj["frequent_items"]));
-    console.log(JSON.parse(obj["association-rules"]));
+    //console.log(JSON.parse(obj["frequent_items"]));
+    //console.log(JSON.parse(obj["association-rules"]));
+    const rules = JSON.parse(obj["association-rules"]);
+    const tdataEL =  document.getElementById("tabledata");
+    let str = "";
+    // rule['antecedents'] should not work , idk why it's working 
+    // not gonna touch it for now will look into later
+    rules.forEach(rule => {
+        str += `
+        <tr>
+        <th scope="row">${rule['lift']}</th>
+        <td>${rule['antecedent support']}</td>
+        <td>${rule['consequent support']}</td>
+        <td>${rule['antecedents']}</td>
+        <td>${rule['consequents']}</td>
+        <td>${rule['confidence']}</td>
+        </tr>
+        `;        
+    });    
+    tdataEL.innerHTML = str;
 }
 
 const plotDataHandler = async () => {
