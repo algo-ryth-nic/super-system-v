@@ -26,12 +26,24 @@ const getResult = async (id) => {
 
 const plotData = (obj) => {
     console.log(JSON.parse(obj["frequent_items"]));
-    console.log(JSON.parse(obj["association-rules"]))
+    console.log(JSON.parse(obj["association-rules"]));
+}
+
+const plotDataHandler = async () => {
+    const obj = await getResult(url.searchParams.get("id"));
+    if(obj.length == 0){
+        // check for results in every 10 seconds if not yet processed
+        setTimeout(plotDataHandler, 10 * 1000);
+    }
+    else{
+        document.getElementById('spinner').innerHTML = "DATA PROCESSING COMPLETE";
+        plotData(obj[0]);
+    }
 }
 
 if (url.searchParams.get("id")) {
     document.getElementsByTagName('button')[0].innerHTML = "DATA UPLOADED";
     document.getElementsByTagName('button')[0].disabled = true;
-    getResult(url.searchParams.get("id")).then(plotData);
+    plotDataHandler();
 }
 
