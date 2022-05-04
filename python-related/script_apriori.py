@@ -7,11 +7,17 @@ import sys
 
 
 def prepareData(df: pd.DataFrame) -> pd.DataFrame:
+    # dropping date column
+    df = df.drop(columns=['Date'], axis=1)
+
     # converts the dataframe to a list of lists
-    data = []
-    for row in range(len(df)):
-        data.append([str(x) for x in df.loc[row,:].values \
-            if str(x) != 'None' and str(x) != 'nan'])
+    data = [
+        item_list.replace('\"', "").split(",") \
+        for item_list in df['items']
+    ]
+    # for row in range(len(df)):
+        # data.append([str(x) for x in df.loc[row,:].values \
+            # if str(x) != 'None' and str(x) != 'nan'])
     te = TransactionEncoder()
     te_ary = te.fit(data).transform(data)
     
@@ -19,10 +25,8 @@ def prepareData(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def run_apriori(id, filepath, support) -> pd.DataFrame:
-    file_extension = os.path.splitext(filepath)[1][1:]
-    # print(file_extension)
-
-    df = pd.read_csv(filepath)
+    # file_extension = os.path.splitext(filepath)[1][1:]
+    # # print(file_extension)
     #if file_extension == 'csv':
     #    df = pd.read_csv(filepath)
     #elif file_extension == 'xlsx' or file_extension == 'xls':
@@ -32,6 +36,7 @@ def run_apriori(id, filepath, support) -> pd.DataFrame:
 
     # MIN_SUP_DEFAULT = 0.1
 
+    df = pd.read_csv(filepath)
     freq_itemsets = apriori(
             prepareData(df), 
             min_support=support, 
