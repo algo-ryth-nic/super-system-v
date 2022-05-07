@@ -4,8 +4,8 @@ const path = require("path");
 
 //DB-CONNECTION
 const { MongoClient } = require("mongodb");
-// const uri = "mongodb://mongodb:27017/";
-const uri = "mongodb://127.0.0.1:27017";
+const uri = "mongodb://mongodb:27017/";
+// const uri = "mongodb://127.0.0.1:27017";
 const client = new MongoClient(uri);
 const { exec } = require("child_process");
 
@@ -24,12 +24,11 @@ connectToDb();
 const app = express();
 const port = 3000;
 
-// const publicPath = path.join(__dirname, "..", "public");
-const publicPath = path.join("/home/pj/Documents/ml-project/html-client/");
+const publicPath = path.join(__dirname, "..", "public");
+// const publicPath = path.join("/home/pj/Documents/ml-project/html-client/");
 app.use(express.static(publicPath));
 
 const uploadPath = path.join(__dirname, "..", "uploads");
-// const uploadPath = path.join(__dirname, "..", "uploads");
 const upload = multer({
   dest: uploadPath,
   fileFilter: function fileFilter(req, file, cb) {
@@ -45,11 +44,11 @@ const upload = multer({
   },
 });
 
-// const pythonCodeDir = "/home/app/python-related/";
-const pythonCodeDir = "/home/pj/Documents/ml-project/python-related";
+const pythonCodeDir = "/home/app/python-related/";
 const pythonScript = "script_apriori.py";
-// const pathToDataset = "/home/app/node-server/uploads/";
-const pathToDataset = "./uploads/";
+const pathToDataset = "/home/app/node-server/uploads/";
+// const pythonCodeDir = "/home/pj/Documents/ml-project/python-related";
+// const pathToDataset = "./uploads/";
 const minSupport = "0.05";
 
 app.post("/upload", upload.single("csvdata"), function (req, res, next) {

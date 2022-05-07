@@ -6,14 +6,17 @@ console.log(url);
 const getResult = async (id) => {
   const result = await fetch(`http://${url.host}/result/${id}`);
   const resultObj = await result.json();
+  console.log(resultObj);
   return resultObj;
 };
 
 const plotData = (obj) => {
+  const body = document.querySelector(".upload-menu-container");
+  body.innerHTML = "";
+
   //console.log(JSON.parse(obj["frequent_items"]));
   //console.log(JSON.parse(obj["association-rules"]));
   const rules = JSON.parse(obj["association-rules"]);
-  const tdataEL = document.getElementById("tabledata");
   let str = "";
   // rule['antecedents'] should not work , idk why it's working
   // not gonna touch it for now will look into later
@@ -29,7 +32,26 @@ const plotData = (obj) => {
         </tr>
         `;
   });
-  tdataEL.innerHTML = str;
+
+  const table = `
+    <div id="tabledata">
+        <table class="table table-borderless">
+          <thead>
+            <tr>
+              <th scope="col">lift</th>
+              <th scope="col">antecedent support</th>
+              <th scope="col">consequent support</th>
+              <th scope="col">antecedents</th>
+              <th scope="col">consequents</th>
+              <th scope="col">confidence</th>
+            </tr>
+          </thead>
+          <tbody>
+           ${str}
+          </tbody>
+        </table>
+      </div>`;
+  body.innerHTML = table;
 };
 
 const plotDataHandler = async () => {
