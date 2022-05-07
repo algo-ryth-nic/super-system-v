@@ -1,100 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <link
-            rel="stylesheet"
-            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-        />
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-        <link
-            rel="icon"
-            href="./favicon.ico"
-            type="image/vnd.microsoft.icon"
-            sizes="48x48"
-        />
-        <script type="module" src="./js/main.js" defer></script>
-        <title>EDV</title>
-        <style>
-            #chart-area {
-                width: calc(100% - 250px);
-                max-width: calc(100% - 250px);
-                display: inline-block;
-            }
-        </style>
-    </head>
-
-    <body>
-        <div class="jumbotron">
-            <div class="container">
-                <h1 class="display-4">Super System V</h1>
-                <p class="lead">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Eius, amet? Doloribus suscipit eligendi non consequatur
-                    voluptatibus, doloremque, cumque ratione rerum, dolorum quam
-                    omnis sapiente odio. Doloremque placeat saepe laborum
-                    maxime?
-                </p>
-                <hr class="my-4" />
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Eius, amet? Doloribus suscipit eligendi non consequatur
-                    voluptatibus, doloremque, cumque ratione rerum, dolorum quam
-                    omnis sapiente odio. Doloremque placeat saepe laborum
-                    maxime?
-                </p>
-                <br />
-                <p>
-                    Tip : Click <a href="./sampledata/">here</a> to get sample
-                    dataset to test the platform
-                </p>
-                <br />
-                <div class="lead">
-                    <form
-                        action="/upload"
-                        method="post"
-                        enctype="multipart/form-data"
-                    >
-                        <input type="file" name="csvdata" />
-                        <button
-                            id="get-data-btn-upd"
-                            type="submit"
-                            class="btn btn-primary mb-2"
-                        >
-                            Upload Data
-                        </button>
-                    </form>
-                </div>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+    <link rel="icon" href="./favicon.ico" type="image/vnd.microsoft.icon" sizes="48x48" />
+    <script type="module" src="./js/main.js" defer></script>
+    <title>Super System V</title>
+    <link rel="stylesheet" href="css/upload.css" />
+  </head>
+  <body>
+    <div class="upload-menu-container">
+      <header>
+        <strong>upload Data</strong>
+      </header>
+      <div class="menu-content-container">
+        <div class="content-header">
+          <h3>Upload File</h3>
+          <h4>Data that we except:</h4>
+          <!-- <h6>(You will have a chance to rename or remove columns in next steps)</h6> -->
+        </div>
+        <div class="content-upload" id="drop-zone">
+          <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <a href="#" id="browse-button">Select File</a>
+              <input type="file" class="form-control-file" id="file" name="csvdata" style="display: none" required />
+              <div class="text-block">
+                <strong>Drop your files here, or Browse</strong>
+                <p>supports .CSV only (1 MB max)</p>
+              </div>
             </div>
+          </form>
         </div>
-        <div class="container justify-content-center">
-            <div id="msg-box"></div>
-        </div>
-        <div class="container">
-            <br />
-            <h3>Generated Rules</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">lift</th>
-                        <th scope="col">antecedent support</th>
-                        <th scope="col">consequent support</th>
-                        <th scope="col">antecedents</th>
-                        <th scope="col">consequents</th>
-                        <th scope="col">confidence</th>
-                    </tr>
-                </thead>
-                <tbody id="tabledata">
-                    <tr>
-                        <th scope="row">${lift}</th>
-                        <td>${antecedent support}</td>
-                        <td>${consequent support}</td>
-                        <td>${antecedents}</td>
-                        <td>${consequents}</td>
-                        <td>${confidence}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </body>
+      </div>
+    </div>
+  </body>
 </html>
