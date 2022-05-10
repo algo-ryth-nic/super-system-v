@@ -1,8 +1,8 @@
 import pandas as pd
 from mlxtend.preprocessing import TransactionEncoder
 from mlxtend.frequent_patterns import apriori, association_rules
-import os
-from handler_db import store_results, get_results
+import numpy as np
+from handler_db import store_results
 import sys
 
 
@@ -15,28 +15,25 @@ def prepareData(df: pd.DataFrame) -> pd.DataFrame:
         item_list.replace('\"', "").split(",") \
         for item_list in df['items']
     ]
-    # for row in range(len(df)):
-        # data.append([str(x) for x in df.loc[row,:].values \
-            # if str(x) != 'None' and str(x) != 'nan'])
+   
     te = TransactionEncoder()
     te_ary = te.fit(data).transform(data)
     
     return pd.DataFrame(te_ary, columns=te.columns_)
 
 
-def run_apriori(id, filepath, support) -> pd.DataFrame:
-    # file_extension = os.path.splitext(filepath)[1][1:]
-    # # print(file_extension)
-    #if file_extension == 'csv':
-    #    df = pd.read_csv(filepath)
-    #elif file_extension == 'xlsx' or file_extension == 'xls':
-    #    df = pd.read_excel(filepath)
-    #else:
-    #    return None
+def extract_rules(generate_rules: pd.DataFrame) -> pd.DataFrame:
+    rules = generate_rules.copy()
+    rules['temp'] = [rules['antecedents'].iloc[i].union(rules['consequents'].iloc[i]) \
+        for i in range(0,len(rules)) ]
+    rules.drop_duplicates(subset=['temp'])
+    rules.drop('temp', axis = 1, inplace = True)
 
-    # MIN_SUP_DEFAULT = 0.1
+    return rules
 
-    df = pd.read_csv(filepath)
+
+def run_apriori(id, data, support) -> pd.DataFrame:
+    df = data.copy()
     freq_itemsets = apriori(
             prepareData(df), 
             min_support=support, 
@@ -44,15 +41,22 @@ def run_apriori(id, filepath, support) -> pd.DataFrame:
         ).sort_values(by='support', ascending=False)
 
 
+    if len(freq_itemsets) == 0:
+        print(f"[!] No frequent itemsets found with support {support}!")
+        return False
+
     rules= association_rules(
             freq_itemsets, 
             metric="lift", 
             min_threshold=1
         ).sort_values(by=['lift', 'confidence'], ascending=False)
 
+    extracted_rules = extract_rules(rules)
+    
+    print(f"[>] Generated... {len(extracted_rules)} rules!")
 
     json_freq_items, json_rules = freq_itemsets.to_json(orient='records'), \
-        rules.to_json(orient='records')
+        extracted_rules.to_json(orient='records')
 
     results = {
         "freq_items": json_freq_items,
@@ -65,7 +69,18 @@ def run_apriori(id, filepath, support) -> pd.DataFrame:
     return json_freq_items, json_rules
 
 
+def support_generator(items,attempts=10):
+    # using an avg-sup value as a starting point for reducing search space
+    # calculated by taking the 
+    # total no. transactions / sum of total number of items per transaction
+    starting_sup = len(items)/sum([len(i.split(',')) for i in items])
+
+    for sup in np.linspace(starting_sup, 0.01, attempts):
+        yield sup
+
+
 if __name__ == '__main__':
+    print("Running script_apriori.py")
     if len(sys.argv) < 4:
         print("Usage: python3 apriori-script.py <path-to-dataset> <uuid> <min-support>")
         exit(1)
@@ -74,4 +89,15 @@ if __name__ == '__main__':
     ID = str(sys.argv[2])
     sup = float(sys.argv[3])
     
-    run_apriori(ID, FILEPATH, sup)
+    df = pd.read_csv(FILEPATH)
+    
+    sup_gen = support_generator(df['items'])
+
+    # on first run, if failed... brute force on various sup values 
+    while not run_apriori(ID, df, sup):
+        try: 
+            new_sup = next(sup_gen)
+            sup = new_sup
+            print(f"[!] Retrying with a different support value => {sup}")    
+        except StopIteration:
+            raise Exception("No more support values to try")
