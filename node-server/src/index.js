@@ -47,15 +47,26 @@ const upload = multer({
 const pythonCodeDir = "/home/app/python-related/";
 const pythonScript = "script_apriori.py";
 const pathToDataset = "/home/app/node-server/uploads/";
-// const pythonCodeDir = "/home/pj/Documents/ml-project/python-related";
-// const pathToDataset = "./uploads/";
+// const pythonCodeDir = "/home/pj/Documents/ml-project/python-related/";
+// const pathToDataset = "uploads/";
 const minSupport = "0.05";
 
 app.post("/upload", upload.single("csvdata"), function (req, res, next) {
   if (req.file) {
     exec(
-      `python3 ${pythonCodeDir}${pythonScript} ${pathToDataset}${req.file.filename} ${req.file.filename} ${minSupport}`
+      `python3 ${pythonCodeDir}${pythonScript} ${pathToDataset}${req.file.filename} ${req.file.filename} ${minSupport}`,
+      (err, stdout, stderr) => {
+        // if (err) {
+        //   console.log(`exec error: ${err}`);
+        //   // res.set("Content-Type", "text/html");
+        //   // return res.status(500).send({ error: err });
+        // }
+        console.log(stdout);
+        console.log(stderr);
+      }
     );
+    console.log("--------- [!] Started apriori script ----------");
+
     res.redirect(`http://${req.get("host")}/?msg=upload sucess&id=${req.file.filename}`);
   } else {
     res.redirect(`http://${req.get("host")}/?msg=wrong format`);
