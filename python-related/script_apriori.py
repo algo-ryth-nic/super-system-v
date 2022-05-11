@@ -26,7 +26,7 @@ def extract_rules(generate_rules: pd.DataFrame) -> pd.DataFrame:
     rules = generate_rules.copy()
     rules['temp'] = [rules['antecedents'].iloc[i].union(rules['consequents'].iloc[i]) \
         for i in range(0,len(rules)) ]
-    rules.drop_duplicates(subset=['temp'])
+    rules.drop_duplicates(subset=['temp'], inplace=True)
     rules.drop('temp', axis = 1, inplace = True)
 
     return rules
@@ -49,7 +49,7 @@ def run_apriori(id, data, support) -> pd.DataFrame:
             freq_itemsets, 
             metric="lift", 
             min_threshold=1
-        ).sort_values(by=['lift', 'confidence'], ascending=False)
+        ).sort_values(by=['lift', 'confidence'], ascending=[False, False])
 
     extracted_rules = extract_rules(rules)
     
