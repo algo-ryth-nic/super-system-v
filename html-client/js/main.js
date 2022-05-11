@@ -11,46 +11,43 @@ const getResult = async (id) => {
 };
 
 const plotData = (obj) => {
-  const body = document.querySelector(".upload-menu-container");
+  const body = document.querySelector("body");
   body.innerHTML = "";
+  body.style.overflow = "auto";
+  body.style.padding = "2rem";
+  body.style.height = "100%";
+  body.style.flexDirection = "column";
 
-  //console.log(JSON.parse(obj["frequent_items"]));
-  //console.log(JSON.parse(obj["association-rules"]));
   const rules = JSON.parse(obj["association-rules"]);
   let str = "";
-  // rule['antecedents'] should not work , idk why it's working
-  // not gonna touch it for now will look into later
-  rules.forEach((rule) => {
+  rules.slice(0, 20).forEach((rule, index) => {
+    const ruleStr = `${rule["antecedents"]} → ${rule["consequents"].join(", ")}`;
+
     str += `
-        <tr>
-        <th scope="row">${rule["lift"]}</th>
-        <td>${rule["antecedent support"]}</td>
-        <td>${rule["consequent support"]}</td>
-        <td>${rule["antecedents"]}</td>
-        <td>${rule["consequents"]}</td>
-        <td>${rule["confidence"]}</td>
-        </tr>
+        <div class="card animate-slidein" style="animation-delay: ${index * 100}ms" id="${index}">
+        <div class="card-body">
+        <div class="card-title">${ruleStr}</div>
+          <p class="card-text">
+            When <strong>${rule["consequents"].join(", ")}</strong> ${
+      rule["consequents"].length > 1 ? "are" : "is"
+    } then <strong>${rule["antecedents"]}</strong> ${rule["antecedents"].length > 1 ? "are" : "is"} ${rule[
+      "lift"
+    ].toFixed(1)} times more likely to be bought.        
+          </p>
+          <span class="badge badge-dark">Occurs: ${(rule["support"] * 100).toFixed(2)}%</span>
+          <span class="badge badge-success">Confidence: ${(rule["confidence"] * 100).toFixed(2)}%</span>
+        </div>
+        </div>
         `;
   });
 
   const table = `
-    <div id="tabledata">
-        <table class="table table-borderless">
-          <thead>
-            <tr>
-              <th scope="col">lift</th>
-              <th scope="col">antecedent support</th>
-              <th scope="col">consequent support</th>
-              <th scope="col">antecedents</th>
-              <th scope="col">consequents</th>
-              <th scope="col">confidence</th>
-            </tr>
-          </thead>
-          <tbody>
-           ${str}
-          </tbody>
-        </table>
-      </div>`;
+    <h5>Recommendations Generated <span class="badge badge-secondary">${rules.length}</span></h5>
+    <div class="messages-container">
+        ${str}
+        <a href="#" id="see-all">See All</a>
+    </div>
+      `;
   body.innerHTML = table;
 };
 

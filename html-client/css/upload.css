@@ -140,3 +140,38 @@ form .text-block {
   font-family: Lato, Arial, sans-serif;
   color: #414141;
 }
+
+h5 {
+  text-align: center;
+}
+
+.messages-container {
+  margin: 1rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 1rem;
+}
+
+.messages-container a {
+  text-align: center;
+}
+
+.card {
+  width: 100% !important;
+}
+
+.animate-slidein {
+  animation: fadein 1s;
+  position: relative;
+}
+
+@keyframes fadein {
+  from {
+    left: -100px;
+    opacity: 0;
+  }
+  to {
+    left: 0px;
+    opacity: 1;
+  }
+}
