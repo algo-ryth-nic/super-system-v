@@ -49,6 +49,11 @@ const plotData = (obj) => {
     </div>
       `;
   body.innerHTML = table;
+
+  const seeAllBtn = document.getElementById("see-all");
+  seeAllBtn.addEventListener("click", () => {
+    alert("Please upgrade to a paid account!");
+  });
 };
 
 const plotDataHandler = async () => {
