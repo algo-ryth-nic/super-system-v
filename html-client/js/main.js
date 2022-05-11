@@ -30,9 +30,9 @@ const plotData = (obj) => {
           <p class="card-text">
             When <strong>${rule["consequents"].join(", ")}</strong> ${
       rule["consequents"].length > 1 ? "are" : "is"
-    } then <strong>${rule["antecedents"]}</strong> ${rule["antecedents"].length > 1 ? "are" : "is"} ${rule[
+    } bought then <strong>${rule["antecedents"]}</strong> ${rule["antecedents"].length > 1 ? "are" : "is"} ${rule[
       "lift"
-    ].toFixed(1)} times more likely to be bought.        
+    ].toFixed(2)} times more likely to be bought.        
           </p>
           <span class="badge badge-dark">Occurs: ${(rule["support"] * 100).toFixed(2)}%</span>
           <span class="badge badge-success">Confidence: ${(rule["confidence"] * 100).toFixed(2)}%</span>
