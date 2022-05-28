@@ -33,3 +33,5 @@ sudo docker-compose down
 - lastly python for performing the ML related tasks & managing the mongodb database.
 
 ![](https://i.imgur.com/Q4NHyhw.png)
+
+[Figma designs](https://www.figma.com/file/I1rh8tC7ybbGxfz7EqStMX/ML-project-Analytics-platform?node-id=812%3A9257)
