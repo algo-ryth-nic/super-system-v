@@ -29,8 +29,8 @@ sudo docker-compose down
 
 - NodeJS/express is used for backend which returns a private URL that can be saved by the client to view the results whenever.
   - ![](https://i.imgur.com/91myxta.png)
-- For forntend, pure HTML/CSS + a little bootstrap
-- lastly python for performing the ML related tasks & managing the mongodb database.
+- For frontend, pure HTML/CSS + a little bootstrap
+- lastly python for performing the ML task & managing the mongodb database.
 
 ![](https://i.imgur.com/Q4NHyhw.png)
 
