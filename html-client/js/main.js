@@ -109,8 +109,7 @@ if (!url.search) {
       // If dropped item is a file
       if (e.dataTransfer.items[0].kind === "file") {
         const file = e.dataTransfer.items[0].getAsFile();
-        console.log("file[" + i + "].name = " + file.name);
-        validateFile(file) ? document.querySelector("form").submit() : console.log("invalid file");
+        validateFile(file) ? uploadFile(file) : console.log("invalid file");
       }
     }
   });
@@ -124,6 +123,35 @@ if (!url.search) {
   document.querySelector("#browse-button").addEventListener("click", () => {
     document.getElementById("file").click();
   });
+
+  // demo data sequence
+  document.getElementById("demo-data").addEventListener("click", () => {
+    const DEMO_DATA_URL =
+      "https://raw.githubusercontent.com/algo-ryth-nic/super-system-v/master/super-system-dummy-dataset.csv";
+    const FILE_NAME = "super-system-dummy-dataset.csv";
+
+    fetch(DEMO_DATA_URL)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const file = new File([blob], FILE_NAME, {
+          type: "text/csv",
+        });
+
+        uploadFile(file);
+      });
+  });
+
+  function uploadFile(file) {
+    const formdata = new FormData(document.querySelector("form"));
+    formdata.append("csvdata", file);
+    console.log(formdata);
+    fetch("/upload", {
+      body: formdata,
+      method: "post",
+    }).then((res) => {
+      if (res.redirected) window.location.href = res.url;
+    });
+  }
 
   function validateFile(file) {
     // file type validation
