@@ -17,8 +17,8 @@ COPY ./html-client ./node-server/public
 COPY ./requirements.txt ./requirements.txt
 
 # Install Python requirments
-RUN --mount=type=cache,mode=0755,target=/root/.cache/pip pip install -r requirements.txt
-# RUN pip install -r requirements.txt
+# RUN --mount=type=cache,mode=0755,target=/root/.cache/pip pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Install modules for node server
 WORKDIR /home/app/node-server
