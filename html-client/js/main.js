@@ -129,7 +129,10 @@ if (!url.search) {
     const DEMO_DATA_URL =
       "https://raw.githubusercontent.com/algo-ryth-nic/super-system-v/master/super-system-dummy-dataset.csv";
     const FILE_NAME = "super-system-dummy-dataset.csv";
-
+    const html_a = document.getElementById("demo-data");
+    html_a.innerHTML = `
+        <div class="spinner-border text-warning"></div>
+    `;
     fetch(DEMO_DATA_URL)
       .then((res) => res.blob())
       .then((blob) => {
